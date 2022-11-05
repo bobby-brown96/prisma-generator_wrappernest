@@ -1,0 +1,23 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "eslint.format.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true
+    },
+    "cSpell.words": [
+        "autoincrement",
+        "commentdisclaimer",
+        "commentdisclamer",
+        "Datamodel",
+        "DMMF",
+        "nestjs",
+        "nestwrapper"
+    ],
+    "workbench.colorTheme": "Colorful-Dark-Theme",
+    "[dockerfile]": {
+        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    },
+    "js/ts.implicitProjectConfig.experimentalDecorators": true
+}

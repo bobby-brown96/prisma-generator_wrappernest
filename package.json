@@ -1,22 +1,27 @@
 {
-  "name": "prisma-generator_wrappernest",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "typescript": "^4.8.4"
-  },
-  "devDependencies": {
-    "eslint": "^8.26.0",
-    "prettier": "^2.7.1",
-    "ts-node": "^10.9.1",
-    "husky": "^8.0.0"
-  }
+    "name": "prisma-generator_wrappernest",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"{src,apps,libs,test,base}/**/*.ts\" --fix",
+        "prepare": "husky install"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "typescript": "^4.8.4"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^5.42.0",
+        "@typescript-eslint/parser": "^5.42.0",
+        "eslint": "^8.26.0",
+        "husky": "^8.0.0",
+        "prettier": "^2.7.1",
+        "pretty-quick": "^3.1.3",
+        "ts-node": "^10.9.1"
+    }
 }
