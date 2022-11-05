@@ -13,7 +13,8 @@
         "Datamodel",
         "DMMF",
         "nestjs",
-        "nestwrapper"
+        "nestwrapper",
+        "wrappernest"
     ],
     "workbench.colorTheme": "Colorful-Dark-Theme",
     "[dockerfile]": {
