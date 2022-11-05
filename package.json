@@ -1,0 +1,22 @@
+{
+  "name": "prisma-generator_wrappernest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
+    "husky": "^8.0.0"
+  }
+}
