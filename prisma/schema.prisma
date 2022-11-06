@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator custom_generator {
   provider = "node dist/bin.js"
-  output   = "../base"
+  output   = "../base" // leave as base in dev, base is auto deleted in build
   //config   = "conf.json"
 }
 
