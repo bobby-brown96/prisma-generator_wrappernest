@@ -2,7 +2,9 @@ import { GeneratorOptions } from "@prisma/generator-helper";
 import { logger, parseEnvValue } from "@prisma/sdk";
 import path from "path";
 import { Options, resolveConfig } from "prettier";
+import { EnumConverter } from "./converters";
 import { GeneratorPathNotExists } from "./error-handler";
+import { writeFileSafely } from "./utils/write-file";
 export const PrismaNestBaseGeneratorOptions = {
     makeIndexFile: {
         desc: "make index file",
@@ -39,6 +41,7 @@ export class PrismaGenerator {
     _prettierOptions: Options;
     rootPath!: string;
     clientPath!: string;
+    _enums: EnumConverter[] = [];
     // wrapper: Wrapper;
 
     constructor(options: GeneratorOptions) {
@@ -104,7 +107,28 @@ export class PrismaGenerator {
         this.clientPath = clientGenerator?.output?.value ?? defaultPath;
     }
 
+    genEnums(): void {
+        this._options.dmmf.datamodel.enums.forEach(async (enumInfo) => {
+            this._enums.push(new EnumConverter(enumInfo));
+        });
+        logger.info(`GENERATED_ENUMS: ${JSON.stringify(this._enums)}`);
+    }
+    writeEnums = async (): Promise<void> => {
+        this._enums.forEach(async (_enum) => {
+            const enumString = _enum.stringify();
+            const writeLocation = path.join(
+                this._options.generator.output?.value || "",
+                `enums`,
+                `${_enum._name}.ts`
+            );
+
+            await writeFileSafely(writeLocation, enumString);
+        });
+    };
+
     run = async (): Promise<void> => {
         logger.info(`running`);
+        this.genEnums();
+        this.writeEnums();
     };
 }

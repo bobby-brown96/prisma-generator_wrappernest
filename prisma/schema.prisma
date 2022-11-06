@@ -57,7 +57,7 @@ model Book {
 }
 
 
-enum NotificationType {
+enum EnumNotificationType {
   newPosts
   newComments
   newFollowers
@@ -67,7 +67,7 @@ enum NotificationType {
   heartOnReply
 }
 
-enum Language {
+enum EnumLanguage {
   Typescript
   Javascript
   Rust
