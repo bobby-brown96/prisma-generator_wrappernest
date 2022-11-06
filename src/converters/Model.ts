@@ -1,9 +1,9 @@
 import { DMMF } from "@prisma/generator-helper";
 import { logger } from "@prisma/sdk";
-import { FieldComponent } from "src/components";
-import { IField, IImport, INameCases, IPrimaryKey } from "src/interfaces";
-import { DefaultPrismaFieldType } from "src/types";
-import { convertBool, toNameCases } from "src/utils/util";
+import { FieldComponent } from "../components";
+import { IField, IImport, INameCases, IPrimaryKey } from "../interfaces";
+import { DefaultPrismaFieldType } from "../types";
+import { convertBool, toNameCases } from "../utils/util";
 
 export class ModelConverter {
     // provided name

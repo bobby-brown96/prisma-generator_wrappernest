@@ -1,8 +1,8 @@
 import { DMMF } from "@prisma/generator-helper";
-import { INameCases } from "src/interfaces/INameCases";
-import { toNameCases } from "src/utils/util";
 import { IField } from "../interfaces/IField";
+import { INameCases } from "../interfaces/INameCases";
 import { DefaultPrismaFieldType } from "../types";
+import { toNameCases } from "../utils/util";
 export class FieldComponent {
     name: string;
     pk = false;

@@ -19,11 +19,11 @@ model UpdateVideoYoutube {
   id        Int      @id @default(autoincrement())
   created   Int
   updated   Int
-  createdAt DateTime @default(now()) 
+  createdAt DateTime @default(now())
 }
 
 model User {
-   /// B$CreatedAt
+  /// B$CreatedAt
   createdAt DateTime       @default(now())
   /// B$Email
   email     String
@@ -38,24 +38,22 @@ model User {
   Book      Book[]
 }
 
-
 model Book {
   /// B$CreatedAt
-  createdAt           DateTime      @default(now()) 
-   /// B$Pk
-  id                  Int           @id @default(autoincrement())
+  createdAt           DateTime @default(now())
+  /// B$Pk
+  id                  Int      @id @default(autoincrement())
   isPrimary           Boolean?
-  name                String        @unique
+  name                String   @unique
   /// B$RelationRequired
   /// B$RelationCanCreateOnCreate
   /// B$RelationCanConnectOnCreate
-  owner               User?         @relation(fields: [ownerId], references: [id])
+  owner               User?    @relation(fields: [ownerId], references: [id])
   ownerId             String?
- primaryCurrencyCode String
+  primaryCurrencyCode String
   /// B$ReadOnly
-  updatedAt           DateTime      @updatedAt 
+  updatedAt           DateTime @updatedAt
 }
-
 
 enum EnumNotificationType {
   newPosts
@@ -75,7 +73,6 @@ enum EnumLanguage {
   Python
   Cpp
 }
-
 
 enum EnumUserRole {
   ROOT
