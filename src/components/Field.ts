@@ -1,5 +1,6 @@
 import { DMMF } from "@prisma/generator-helper";
 import { logger } from "@prisma/sdk";
+import { fieldGeneratorGeneral } from "src/templates";
 import { IField } from "../interfaces/IField";
 import { INameCases } from "../interfaces/INameCases";
 import { DefaultPrismaFieldType } from "../types";
@@ -36,8 +37,9 @@ export class FieldComponent {
             this.unique = options.unique;
         }
         if (options.required) {
+            this.docString.push("IsNotEmpty");
             this.required = options.required;
-        }
+        } else this.docString.push("IsOptional");
         if (options.readonly) {
             this.readonly = options.readonly;
         }
@@ -105,6 +107,16 @@ export class FieldComponent {
             return dec;
         });
     }
+
+    stringify = (): string => {
+        let decVal = "";
+        this._docs.forEach((d) => {
+            decVal += `${d.decorateName}\n`;
+        });
+        const decString = fieldGeneratorGeneral(this.name, this.tsType, decVal);
+
+        return decString;
+    };
 }
 
 const u = {
