@@ -1,0 +1,1 @@
+export { TEnum } from "./enum";
