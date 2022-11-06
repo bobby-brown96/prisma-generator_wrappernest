@@ -31,12 +31,24 @@ export class ModelConverter {
         this._rawModel = options;
         this.pk = this.createIdObj(options.fields);
         this._relations = this.mapRelations(options.fields);
+        logger.info(`preview relations ${JSON.stringify(this._relations)}`);
+
         this._fields = this.mapFields(options.fields);
+        this.markRelationFromFieldsOptional();
         logger.info(
             `CONSTRUCTED MODEL ${this.name} to ${JSON.stringify(this)}`
         );
     }
+    markRelationFromFieldsOptional(): void {
+        const relateFrom = this._relations.flatMap((x) => x.relationFromFields);
 
+        if (relateFrom.length === 0) return;
+        for (let i = 0; i < this._fields.length; i++) {
+            if (relateFrom.includes(this._fields[i].name)) {
+                this._fields[i].required = false;
+            }
+        }
+    }
     createIdObj(options: DMMF.Field[]): IPrimaryKey {
         const idTrue = options.find((x) => x.isId);
         if (idTrue)
