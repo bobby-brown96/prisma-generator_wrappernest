@@ -20,9 +20,8 @@ generatorHandler({
     },
     onGenerate: async (options: GeneratorOptions) => {
         try {
-            logger.info(`${GENERATOR_NAME}:Registered again`);
+            logger.info(`${GENERATOR_NAME}:Generation Running`);
             return await PrismaGenerator.getInstance(options).run();
-            return;
         } catch (error) {
             handleGenerateError(error as Error);
             return;
