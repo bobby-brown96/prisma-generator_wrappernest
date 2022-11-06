@@ -2,6 +2,7 @@ import { GeneratorOptions } from "@prisma/generator-helper";
 import { logger, parseEnvValue } from "@prisma/sdk";
 import path from "path";
 import { Options, resolveConfig } from "prettier";
+import { COMMENT_DISCLAIMER } from "./constants";
 import { EnumConverter, ModelConverter } from "./converters";
 import { GeneratorPathNotExists } from "./error-handler";
 import { writeFileSafely } from "./utils/write-file";
@@ -43,6 +44,7 @@ export class PrismaGenerator {
     clientPath!: string;
     _enums: EnumConverter[] = [];
     _models: ModelConverter[] = [];
+    commentdisclaimer = COMMENT_DISCLAIMER;
     // wrapper: Wrapper;
 
     constructor(options: GeneratorOptions) {
@@ -123,7 +125,10 @@ export class PrismaGenerator {
                 `${_enum._name}.ts`
             );
 
-            await writeFileSafely(writeLocation, enumString);
+            await writeFileSafely(
+                writeLocation,
+                this.commentdisclaimer + enumString
+            );
         });
     };
 
@@ -150,7 +155,7 @@ export class PrismaGenerator {
         this.genEnums();
 
         // Generate the models as the base for everything
-        await this.genModels();
+        //      await this.genModels();
         // run writer function
         await this.writer();
     };
