@@ -1,8 +1,8 @@
 import { GeneratorOptions } from "@prisma/generator-helper";
 import { logger, parseEnvValue } from "@prisma/sdk";
-import { GeneratorPathNotExists } from "error-handler";
 import path from "path";
 import { Options, resolveConfig } from "prettier";
+import { GeneratorPathNotExists } from "./error-handler";
 export const PrismaNestBaseGeneratorOptions = {
     makeIndexFile: {
         desc: "make index file",
