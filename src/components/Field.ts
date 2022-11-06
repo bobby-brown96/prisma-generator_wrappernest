@@ -38,6 +38,7 @@ export class FieldComponent {
         if (options.readonly) {
             this.readonly = options.readonly;
         }
+        this.mapFieldType();
     }
 
     mapFieldType(): void {
