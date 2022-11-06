@@ -140,12 +140,27 @@ export class PrismaGenerator {
         }
     }
 
+    writeModels = async (): Promise<void> => {
+        for await (const _model of this._models) {
+            const modelString = _model.stringifyEntity();
+            const writeLocation = path.join(
+                this._options.generator.output?.value || "",
+                `${_model.nameValues.camel}`,
+                `${_model.nameValues.pascal}.ts`
+            );
+            await writeFileSafely(
+                writeLocation,
+                this.commentdisclaimer + `\n\n` + modelString
+            );
+        }
+    };
     /**
      * Writer Function
      * Moved to here as they pass testing
      */
     async writer(): Promise<void> {
         await this.writeEnums();
+        await this.writeModels();
     }
 
     run = async (): Promise<void> => {

@@ -1,7 +1,17 @@
 import { DMMF } from "@prisma/generator-helper";
 import { logger } from "@prisma/sdk";
-import { FieldComponent, RelationComponent } from "../components";
+import {
+    DecoratorComponent,
+    FieldComponent,
+    RelationComponent
+} from "../components";
 import { IField, IImport, INameCases, IPrimaryKey } from "../interfaces";
+import {
+    classGenerator,
+    importGeneratorEnum,
+    importGeneratorGeneral,
+    importGeneratorModel
+} from "../templates";
 import { DefaultPrismaFieldType } from "../types";
 import { convertBool, toNameCases } from "../utils/util";
 
@@ -66,7 +76,8 @@ export class ModelConverter {
                 relationName: f.relationName || "",
                 relationFromFields: f.relationFromFields || [],
                 relationToFields: f.relationToFields || [],
-                isMandatory: false
+                isMandatory: false,
+                obj: f.type
             };
         });
     }
@@ -118,5 +129,40 @@ export class ModelConverter {
             .join(`\n\n`);
     }
 
-    // stringifyEntity(): string {}
+    stringifyImports(): string {
+        let iString = "";
+
+        this._enums.forEach((e) => (iString += `${importGeneratorEnum(e)};\n`));
+
+        this._relations.forEach(
+            (r) => (iString += `${importGeneratorModel(r.obj)};\n`)
+        );
+
+        logger.info(`imports to generate: ${JSON.stringify(this._imports)}`);
+        this._imports.forEach(
+            (d) =>
+                (iString += `${importGeneratorGeneral({
+                    NAME: d.NAME,
+                    MODULE: d.MODULE
+                })};\n`)
+        );
+        return iString;
+    }
+
+    stringifyEntity(): string {
+        const fieldString = this.stringifyFields();
+
+        return classGenerator(
+            this.nameValues.pascal,
+            fieldString,
+            this.stringifyImports()
+        );
+    }
+
+    getAllDecorators(): DecoratorComponent[] {
+        let allDecorators = this._fields.flatMap((x) => x._docs);
+        allDecorators = [...new Set(allDecorators)];
+        logger.info(`all decorators: ${JSON.stringify(allDecorators)}`);
+        return allDecorators;
+    }
 }

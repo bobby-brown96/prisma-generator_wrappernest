@@ -29,3 +29,14 @@ export function importGeneratorModel(opts: string): string {
         MODULE: `./${opts}`
     });
 }
+
+export function classGenerator(
+    name: string,
+    body: string,
+    decorator = ""
+): string {
+    return `${decorator}
+    export class ${name} {
+        ${body}
+      }`;
+}
