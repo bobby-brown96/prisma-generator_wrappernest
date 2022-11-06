@@ -109,6 +109,10 @@ export class ModelConverter {
             return temp;
         });
     }
+
+    // stringifyEntity():string{
+
+    // }
 }
 
 const book = {

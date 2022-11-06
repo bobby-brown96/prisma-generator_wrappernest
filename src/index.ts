@@ -10,7 +10,7 @@ const { version } = require("../package.json");
 
 generatorHandler({
     onManifest() {
-        logger.info(`${GENERATOR_NAME}:Registered 🔥 🔥 🔥 `);
+        logger.info(`${GENERATOR_NAME}:Registered`);
         return {
             version,
             defaultOutput: "../base",
@@ -24,7 +24,7 @@ generatorHandler({
             return await PrismaGenerator.getInstance(options).run();
         } catch (error) {
             handleGenerateError(error as Error);
-            logger.error(`❗ ❗  ERROR ON GENERATE ❗ ❗ `);
+            logger.error(`ERROR ON GENERATE`);
             return;
         }
     }

@@ -149,13 +149,13 @@ export class PrismaGenerator {
     }
 
     run = async (): Promise<void> => {
-        logger.info(`running generator 🔥 `);
+        logger.info(`running generator`);
         // Generate the enum object
-        this.genEnums();
+        //     this.genEnums();
 
         // Generate the models as the base for everything
-        await this.genModels();
+        //     await this.genModels();
         // run writer function
-        await this.writer();
+        //     await this.writer();
     };
 }
