@@ -1,8 +1,10 @@
 import { DMMF } from "@prisma/generator-helper";
+import { logger } from "@prisma/sdk";
 import { IField } from "../interfaces/IField";
 import { INameCases } from "../interfaces/INameCases";
 import { DefaultPrismaFieldType } from "../types";
 import { toNameCases } from "../utils/util";
+import { DecoratorComponent } from "./Decorator";
 export class FieldComponent {
     name: string;
     pk = false;
@@ -11,7 +13,8 @@ export class FieldComponent {
     prismaType: DefaultPrismaFieldType;
     required = false;
     readonly = false;
-    docs: string[] = [];
+    docString: string[] = [];
+    _docs: DecoratorComponent[] = [];
     _enums: string[] = [];
     _relations: string[] = [];
     tsType?: string;
@@ -38,6 +41,10 @@ export class FieldComponent {
         if (options.readonly) {
             this.readonly = options.readonly;
         }
+        if (options.decorations)
+            this.docString.push(...this.docsToArray(options.decorations));
+
+        if (this.docString.length > 0) this._docs = this.createDecorators();
         this.mapFieldType();
     }
 
@@ -71,18 +78,32 @@ export class FieldComponent {
     prismaToDecorate(): void {
         switch (this.prismaType) {
             case "DateTime":
-                this.docs.push("@IsDate()");
+                this.docString.push("IsDate");
                 break;
             case "String":
-                this.docs.push("@IsString()");
+                this.docString.push("IsString");
                 break;
             case "Boolean":
-                this.docs.push("@IsBoolean()");
+                this.docString.push("IsBoolean");
                 break;
             case "BigInt":
-                this.docs.push("@IsInt()");
+                this.docString.push("IsInt");
                 break;
         }
+    }
+
+    docsToArray(decorations: string): string[] {
+        const ugly = decorations.split("\n");
+        logger.info(`ugly ${ugly}`);
+        return ugly;
+    }
+
+    createDecorators(): DecoratorComponent[] {
+        this.prismaToDecorate();
+        return this.docString.map((name) => {
+            const dec = new DecoratorComponent({ name });
+            return dec;
+        });
     }
 }
 

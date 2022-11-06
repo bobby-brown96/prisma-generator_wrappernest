@@ -17,3 +17,27 @@ export type DefaultPrismaFieldType =
     | "Int"
     | "Json"
     | "String";
+
+export type InOut = {
+    input: string;
+    output: string[];
+};
+
+export const ClassTransformers = ["Exclude", "Expose", "Type"] as const;
+
+export const ClassValidators = [
+    "IsArray",
+    "IsBoolean",
+    "IsDate",
+    "IsDecimal",
+    "IsEnum",
+    "IsNotEmpty",
+    "IsNumber",
+    "IsObject",
+    "IsOptional",
+    "IsJSON",
+    "IsInt",
+    "ValidateNested",
+    "IsString",
+    "IsEmail"
+] as const;

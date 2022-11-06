@@ -31,7 +31,6 @@ export class ModelConverter {
         this._rawModel = options;
         this.pk = this.createIdObj(options.fields);
         this._relations = this.mapRelations(options.fields);
-        logger.info(`preview relations ${JSON.stringify(this._relations)}`);
 
         this._fields = this.mapFields(options.fields);
         this.markRelationFromFieldsOptional();
