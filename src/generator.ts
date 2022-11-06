@@ -1,0 +1,110 @@
+import { GeneratorOptions } from "@prisma/generator-helper";
+import { logger, parseEnvValue } from "@prisma/sdk";
+import { GeneratorPathNotExists } from "error-handler";
+import path from "path";
+import { Options, resolveConfig } from "prettier";
+export const PrismaNestBaseGeneratorOptions = {
+    makeIndexFile: {
+        desc: "make index file",
+        defaultValue: true
+    },
+    dryRun: {
+        desc: "dry run",
+        defaultValue: true
+    },
+    separateRelationFields: {
+        desc: "separate relation fields",
+        defaultValue: false
+    },
+    useSwagger: {
+        desc: "use swagger decorator",
+        defaultValue: true
+    },
+    output: {
+        desc: "output path",
+        defaultValue: "./base"
+    }
+} as const;
+
+export type PrismaNestBaseGeneratorOptionsKeys =
+    keyof typeof PrismaNestBaseGeneratorOptions;
+export type PrismaNestBaseGeneratorConfig = Partial<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Record<PrismaNestBaseGeneratorOptionsKeys, any>
+>;
+
+export class PrismaGenerator {
+    static instance: PrismaGenerator;
+    _options: GeneratorOptions;
+    _prettierOptions: Options;
+    rootPath!: string;
+    clientPath!: string;
+    // wrapper: Wrapper;
+
+    constructor(options: GeneratorOptions) {
+        // if (options) {
+        //     this._options = options;
+        // }
+        this._options = options;
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const output = parseEnvValue(this._options.generator.output!);
+
+        this._prettierOptions =
+            resolveConfig.sync(output, { useCache: false }) ||
+            (resolveConfig.sync(process.cwd()) as Options);
+    }
+
+    static getInstance(options: GeneratorOptions): PrismaGenerator {
+        if (PrismaGenerator.instance) {
+            return PrismaGenerator.instance;
+        }
+        PrismaGenerator.instance = new PrismaGenerator(options);
+        return PrismaGenerator.instance;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    public get options() {
+        return this._options;
+    }
+
+    public set options(value) {
+        this._options = value;
+    }
+
+    public get prettierOptions(): Options {
+        return this._prettierOptions;
+    }
+
+    public set prettierOptions(value) {
+        this._prettierOptions = value;
+    }
+
+    getClientImportPath(): string {
+        if (!this.rootPath || !this.clientPath) {
+            throw new GeneratorPathNotExists();
+        }
+        return path
+            .relative(this.rootPath, this.clientPath)
+            .replace("node_modules/", "");
+    }
+
+    setPrismaClientPath(): void {
+        const { otherGenerators, schemaPath } = this.options;
+
+        this.rootPath = schemaPath.replace("/prisma/schema.prisma", "");
+        const defaultPath = path.resolve(
+            this.rootPath,
+            "node_modules/@prisma/client"
+        );
+        const clientGenerator = otherGenerators.find(
+            (g) => g.provider.value === "prisma-client-js"
+        );
+
+        this.clientPath = clientGenerator?.output?.value ?? defaultPath;
+    }
+
+    run = async (): Promise<void> => {
+        logger.info(`running`);
+    };
+}
