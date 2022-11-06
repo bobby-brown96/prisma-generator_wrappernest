@@ -44,22 +44,32 @@ These instructions will get you a copy of the project up and running on your loc
 
 -   Generators
 
-    -   [ ] Entity
-    -   [ ] Service
-    -   [ ] CreateDto
-    -   [ ] UpdateDto
-    -   [ ] ConnectDto
-    -   [ ] Controller
-    -   [ ] Module
+    - [x] Enum
+    - [ ] Entity
+    - [ ] Service
+    - [ ] CreateDto
+    - [ ] UpdateDto
+    - [ ] ConnectDto
+    - [ ] Controller
+    - [ ] Module
 
 -   Write Files
-    -   [ ] Entity
-    -   [ ] Service
-    -   [ ] CreateDto
-    -   [ ] UpdateDto
-    -   [ ] ConnectDto
-    -   [ ] Controller
-    -   [ ] Module
+    - [x] Enum
+    - [ ] Entity
+    - [ ] Service
+    - [ ] CreateDto
+    - [ ] UpdateDto
+    - [ ] ConnectDto
+    - [ ] Controller
+    - [ ] Module
+
+
+-   Component Tasks
+    - [ ] FieldComponent
+    - [ ] RelationComponent
+    - [ ] DecoratorComponent
+    - [ ] FunctionComponent
+
 
 ### Prerequisites
 

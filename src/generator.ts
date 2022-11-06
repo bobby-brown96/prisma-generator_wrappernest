@@ -2,7 +2,7 @@ import { GeneratorOptions } from "@prisma/generator-helper";
 import { logger, parseEnvValue } from "@prisma/sdk";
 import path from "path";
 import { Options, resolveConfig } from "prettier";
-import { EnumConverter } from "./converters";
+import { EnumConverter, ModelConverter } from "./converters";
 import { GeneratorPathNotExists } from "./error-handler";
 import { writeFileSafely } from "./utils/write-file";
 export const PrismaNestBaseGeneratorOptions = {
@@ -42,6 +42,7 @@ export class PrismaGenerator {
     rootPath!: string;
     clientPath!: string;
     _enums: EnumConverter[] = [];
+    _models: ModelConverter[] = [];
     // wrapper: Wrapper;
 
     constructor(options: GeneratorOptions) {
@@ -126,6 +127,19 @@ export class PrismaGenerator {
         });
     };
 
+    async genModels(): Promise<void> {
+        for await (const modelInfo of this._options.dmmf.datamodel.models) {
+            logger.info(`going to process model: ${modelInfo}`);
+            const tsModel = new ModelConverter(modelInfo);
+            this._models.push(tsModel);
+        }
+        logger.info(`GEN MODELS ${JSON.stringify(this._models)}`);
+    }
+
+    /**
+     * Writer Function
+     * Moved to here as they pass testing
+     */
     async writer(): Promise<void> {
         await this.writeEnums();
     }
@@ -135,6 +149,8 @@ export class PrismaGenerator {
         // Generate the enum object
         this.genEnums();
 
+        // Generate the models as the base for everything
+        await this.genModels();
         // run writer function
         await this.writer();
     };
