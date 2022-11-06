@@ -40,6 +40,27 @@ This is a Prisma Generator for creating Nestjs Entities, Dtos, Services, Control
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
+### Status of Package
+
+-   Generators
+
+    -   [ ] Entity
+    -   [ ] Service
+    -   [ ] CreateDto
+    -   [ ] UpdateDto
+    -   [ ] ConnectDto
+    -   [ ] Controller
+    -   [ ] Module
+
+-   Write Files
+    -   [ ] Entity
+    -   [ ] Service
+    -   [ ] CreateDto
+    -   [ ] UpdateDto
+    -   [ ] ConnectDto
+    -   [ ] Controller
+    -   [ ] Module
+
 ### Prerequisites
 
 This isn't a starting place to learn prisma. Go to [prisma.io](https://www.prisma.io/) or [NestJs](https://nestjs.com/) for more information about the foundation of this project.
@@ -98,8 +119,8 @@ Add additional notes about how to deploy this on a live system.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
--   [MongoDB](https://www.mongodb.com/) - Database
--   [Express](https://expressjs.com/) - Server Framework
+-   [Prisma](https://www.prisma.io/) - Generator for
+-   [NestJs](https://nestjs.com/) - Server Framework
 -   [VueJs](https://vuejs.org/) - Web Framework
 -   [NodeJs](https://nodejs.org/en/) - Server Environment
 
