@@ -126,11 +126,16 @@ export class PrismaGenerator {
         });
     };
 
+    async writer(): Promise<void> {
+        await this.writeEnums();
+    }
+
     run = async (): Promise<void> => {
         logger.info(`running`);
         // Generate the enum object
         this.genEnums();
-        // Enums files written separately, more basic
-        this.writeEnums();
+
+        // run writer function
+        await this.writer();
     };
 }
