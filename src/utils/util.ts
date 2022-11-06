@@ -1,6 +1,11 @@
 import * as changeCase from "change-case";
 import { INameCases } from "../interfaces/INameCases";
 
+/**
+ * Using to transform inputs
+ * @param opts
+ * @returns
+ */
 export const convertBool = (opts: boolean): boolean => {
     return opts === false ? false : true;
 };
