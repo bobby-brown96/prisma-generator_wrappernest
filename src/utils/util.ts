@@ -5,6 +5,11 @@ export const convertBool = (opts: boolean): boolean => {
     return opts === false ? false : true;
 };
 
+/**
+ *
+ * @param opts String to change cases
+ * @returns {INameCases}
+ */
 export const toNameCases = (opts: string): INameCases => {
     return {
         camel: changeCase.camelCase(opts),
