@@ -18,6 +18,6 @@ export class EnumConverter {
     }
 
     stringify(): string {
-        return TEnum({ name: this._name, enumValues: this.joinedValues });
+        return TEnum({ name: this._name, enumValues: this.joinedValues() });
     }
 }
