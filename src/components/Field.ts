@@ -1,8 +1,8 @@
 import { DMMF } from "@prisma/generator-helper";
 import { logger } from "@prisma/sdk";
-import { fieldGeneratorGeneral } from "src/templates";
 import { IField } from "../interfaces/IField";
 import { INameCases } from "../interfaces/INameCases";
+import { fieldGeneratorGeneral } from "../templates";
 import { DefaultPrismaFieldType } from "../types";
 import { toNameCases } from "../utils/util";
 import { DecoratorComponent } from "./Decorator";
