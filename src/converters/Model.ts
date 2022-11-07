@@ -213,6 +213,8 @@ export class ModelConverter {
 
     // FUNCTIONS FOR GETTING FIELDS
     createFields(): FieldComponent[] {
-        return this._fields.filter((f) => !f.readonly);
+        return this._fields.filter(
+            (f) => !f.readonly && !["createdAt", "updatedAt"].includes(f.name)
+        );
     }
 }
