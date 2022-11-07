@@ -42,7 +42,7 @@ export class FieldComponent {
         } else this.docString.push("IsOptional");
         if (options.readonly) {
             this.readonly = options.readonly;
-        }
+        } else this.docString.push("Prop");
         if (options.decorations)
             this.docString.push(...this.docsToArray(options.decorations));
 

@@ -23,6 +23,12 @@ export class DecoratorComponent {
 
     static MAPPED_DECORATIONS: IDecoration[] = [
         {
+            input: "Prop",
+            output: ["@ApiProperty()"],
+            importFrom: "@nestjs/swagger",
+            importName: "ApiProperty"
+        },
+        {
             input: "B$Email",
             output: ["@IsEmail()"],
             importFrom: "class-validator",
