@@ -1,4 +1,3 @@
-import { DMMF } from "@prisma/client/runtime";
 import { GeneratorOptions } from "@prisma/generator-helper";
 import { logger, parseEnvValue } from "@prisma/sdk";
 import path from "path";
@@ -147,8 +146,8 @@ export class PrismaGenerator {
 
             const tsModel = new ModelConverter(modelInfo);
 
-            //populate dtos at the same time
-            this.genDtos(modelInfo);
+            // //populate dtos at the same time
+            // this.genDtos(modelInfo);
 
             this._models.push(tsModel);
         }
@@ -169,9 +168,11 @@ export class PrismaGenerator {
         }
     };
 
-    async genDtos(options: DMMF.Model): Promise<void> {
-        const dtoConverter = new DtoConverter(options);
-        this._dtos.push(dtoConverter);
+    async genDtos(): Promise<void> {
+        for await (const modelInfo of this._options.dmmf.datamodel.models) {
+            const tsDto = new DtoConverter(modelInfo);
+            this._dtos.push(tsDto);
+        }
     }
 
     async genServices(): Promise<void> {
@@ -215,6 +216,9 @@ export class PrismaGenerator {
         await this.genModels();
 
         await this.genServices();
+
+        await this.genDtos();
+
         // run writer function
         await this.writer();
     };
