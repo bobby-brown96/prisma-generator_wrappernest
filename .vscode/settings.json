@@ -12,6 +12,7 @@
         "commentdisclamer",
         "Datamodel",
         "DMMF",
+        "dtos",
         "nestjs",
         "nestwrapper",
         "serv",

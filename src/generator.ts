@@ -1,9 +1,15 @@
+import { DMMF } from "@prisma/client/runtime";
 import { GeneratorOptions } from "@prisma/generator-helper";
 import { logger, parseEnvValue } from "@prisma/sdk";
 import path from "path";
 import { Options, resolveConfig } from "prettier";
 import { COMMENT_DISCLAIMER } from "./constants";
-import { EnumConverter, ModelConverter, ServiceConverter } from "./converters";
+import {
+    DtoConverter,
+    EnumConverter,
+    ModelConverter,
+    ServiceConverter
+} from "./converters";
 
 import { GeneratorPathNotExists } from "./error-handler";
 import { writeFileSafely } from "./utils/write-file";
@@ -47,6 +53,7 @@ export class PrismaGenerator {
     _enums: EnumConverter[] = [];
     _models: ModelConverter[] = [];
     _services: ServiceConverter[] = [];
+    _dtos: DtoConverter[] = [];
     // wrapper: Wrapper;
 
     constructor(options: GeneratorOptions) {
@@ -137,7 +144,12 @@ export class PrismaGenerator {
     async genModels(): Promise<void> {
         for await (const modelInfo of this._options.dmmf.datamodel.models) {
             logger.info(`going to process model: ${modelInfo}`);
+
             const tsModel = new ModelConverter(modelInfo);
+
+            //populate dtos at the same time
+            this.genDtos(modelInfo);
+
             this._models.push(tsModel);
         }
     }
@@ -156,6 +168,11 @@ export class PrismaGenerator {
             );
         }
     };
+
+    async genDtos(options: DMMF.Model): Promise<void> {
+        const dtoConverter = new DtoConverter(options);
+        this._dtos.push(dtoConverter);
+    }
 
     async genServices(): Promise<void> {
         for await (const modelInfo of this._options.dmmf.datamodel.models) {

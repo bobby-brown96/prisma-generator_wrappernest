@@ -41,3 +41,16 @@ export const ClassValidators = [
     "IsString",
     "IsEmail"
 ] as const;
+
+export type DtoType = "CREATE" | "UPDATE" | "CONNECT";
+
+export type BaseFunctions = "CREATE" | "READ" | "UPDATE" | "DELETE";
+
+export type ApiTypes = "POST" | "GET" | "PATCH" | "PUT" | "DELETE";
+
+export type MappedTypes = {
+    CREATE: ["POST"];
+    READ: ["GET"];
+    UPDATE: ["PUT", "PATCH"];
+    DELETE: ["DELETE"];
+};
