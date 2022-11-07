@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { DMMF } from "@prisma/generator-helper";
 import { logger } from "@prisma/sdk";
 import {
@@ -47,6 +48,7 @@ export class ModelConverter {
         logger.info(
             `CONSTRUCTED MODEL ${this.name} to ${JSON.stringify(this)}`
         );
+        this.decsToImports(this.getAllDecorators());
     }
     markRelationFromFieldsOptional(): void {
         const relateFrom = this._relations.flatMap((x) => x.relationFromFields);
@@ -151,7 +153,7 @@ export class ModelConverter {
 
     stringifyEntity(): string {
         const fieldString = this.stringifyFields();
-
+        const decorators = this.getAllDecorators();
         return classGenerator(
             this.nameValues.pascal,
             fieldString,
@@ -164,5 +166,36 @@ export class ModelConverter {
         allDecorators = [...new Set(allDecorators)];
         logger.info(`all decorators: ${JSON.stringify(allDecorators)}`);
         return allDecorators;
+    }
+
+    decsToImports(options: DecoratorComponent[]): void {
+        const m = options.map((o) => {
+            return {
+                importFrom: o.importFrom,
+                importName: o.importName
+            };
+        });
+        const reduced = m.reduce((group, i) => {
+            const { importFrom } = i;
+            //@ts-ignore
+            group[importFrom] = group[importFrom] ?? [];
+            //@ts-ignore
+            group[importFrom].push(i.importName);
+            return group;
+        }, {});
+
+        logger.info(`reduce values: ${JSON.stringify(reduced)}`);
+        let i: IImport[] = [];
+        for (const [k, v] of Object.entries(reduced)) {
+            const t = [...new Set(v as string[])];
+            if (k && k !== "")
+                i.push({
+                    NAME: v ? `{${t.join(",")}}` : "*",
+                    MODULE: k
+                });
+        }
+        i = [...new Set(i)];
+
+        this._imports.push(...i);
     }
 }

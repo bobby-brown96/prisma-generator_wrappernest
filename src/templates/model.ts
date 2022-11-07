@@ -1,4 +1,5 @@
 import { IImport } from "../interfaces";
+import { toNameCases } from "../utils/util";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function fieldGeneratorGeneral(
@@ -24,9 +25,10 @@ export function importGeneratorEnum(opts: string): string {
 }
 
 export function importGeneratorModel(opts: string): string {
+    const names = toNameCases(opts);
     return importGeneratorGeneral({
-        NAME: `{${opts}}`,
-        MODULE: `./${opts}`
+        NAME: `{${names.pascal}}`,
+        MODULE: `../${names.camel}/${names.pascal}`
     });
 }
 
