@@ -165,7 +165,7 @@ export class ModelConverter {
 
     stringifyEntity(): string {
         const fieldString = this.stringifyFields();
-        const decorators = this.getAllDecorators();
+        //  const decorators = this.getAllDecorators();
         return classGenerator(
             this.nameValues.pascal,
             fieldString,
