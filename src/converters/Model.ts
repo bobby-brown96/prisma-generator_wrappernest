@@ -210,4 +210,9 @@ export class ModelConverter {
 
         this._imports.push(...i);
     }
+
+    // FUNCTIONS FOR GETTING FIELDS
+    createFields(): FieldComponent[] {
+        return this._fields.filter((f) => !f.readonly);
+    }
 }
