@@ -3,7 +3,8 @@ import { logger, parseEnvValue } from "@prisma/sdk";
 import path from "path";
 import { Options, resolveConfig } from "prettier";
 import { COMMENT_DISCLAIMER } from "./constants";
-import { EnumConverter, ModelConverter } from "./converters";
+import { EnumConverter, ModelConverter, ServiceConverter } from "./converters";
+
 import { GeneratorPathNotExists } from "./error-handler";
 import { writeFileSafely } from "./utils/write-file";
 export const PrismaNestBaseGeneratorOptions = {
@@ -38,13 +39,14 @@ export type PrismaNestBaseGeneratorConfig = Partial<
 
 export class PrismaGenerator {
     static instance: PrismaGenerator;
+    commentdisclaimer = COMMENT_DISCLAIMER;
     _options: GeneratorOptions;
     _prettierOptions: Options;
     rootPath!: string;
     clientPath!: string;
     _enums: EnumConverter[] = [];
     _models: ModelConverter[] = [];
-    commentdisclaimer = COMMENT_DISCLAIMER;
+    _services: ServiceConverter[] = [];
     // wrapper: Wrapper;
 
     constructor(options: GeneratorOptions) {
@@ -154,6 +156,29 @@ export class PrismaGenerator {
             );
         }
     };
+
+    async genServices(): Promise<void> {
+        for await (const modelInfo of this._options.dmmf.datamodel.models) {
+            const tsService = new ServiceConverter(modelInfo);
+            this._services.push(tsService);
+        }
+    }
+
+    writeServices = async (): Promise<void> => {
+        for await (const _service of this._services) {
+            const serviceString = _service.stringify();
+            logger.info(`serv string: ${serviceString}`);
+            const writeLocation = path.join(
+                this._options.generator.output?.value || "",
+                `${_service.nameValues.camel}`,
+                `${_service.nameValues.camel}.service.ts`
+            );
+            await writeFileSafely(
+                writeLocation,
+                this.commentdisclaimer + `\n\n` + serviceString
+            );
+        }
+    };
     /**
      * Writer Function
      * Moved to here as they pass testing
@@ -161,6 +186,7 @@ export class PrismaGenerator {
     async writer(): Promise<void> {
         await this.writeEnums();
         await this.writeModels();
+        await this.writeServices();
     }
 
     run = async (): Promise<void> => {
@@ -170,6 +196,8 @@ export class PrismaGenerator {
 
         // Generate the models as the base for everything
         await this.genModels();
+
+        await this.genServices();
         // run writer function
         await this.writer();
     };

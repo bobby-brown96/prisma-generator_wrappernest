@@ -134,13 +134,25 @@ export class ModelConverter {
     stringifyImports(): string {
         let iString = "";
 
+        logger.info(`imports to generate: ${JSON.stringify(this._imports)}`);
+        this._imports.forEach(
+            (d) =>
+                (iString += `${importGeneratorGeneral({
+                    NAME: d.NAME,
+                    MODULE: d.MODULE
+                })};\n`)
+        );
+        return iString;
+    }
+
+    stringifyEntityImports(): string {
+        let iString = "";
+
         this._enums.forEach((e) => (iString += `${importGeneratorEnum(e)};\n`));
 
         this._relations.forEach(
             (r) => (iString += `${importGeneratorModel(r.obj)};\n`)
         );
-
-        logger.info(`imports to generate: ${JSON.stringify(this._imports)}`);
         this._imports.forEach(
             (d) =>
                 (iString += `${importGeneratorGeneral({
@@ -157,7 +169,7 @@ export class ModelConverter {
         return classGenerator(
             this.nameValues.pascal,
             fieldString,
-            this.stringifyImports()
+            this.stringifyEntityImports()
         );
     }
 
