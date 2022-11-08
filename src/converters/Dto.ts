@@ -1,8 +1,14 @@
 import { DMMF } from "@prisma/client/runtime";
-import { createDtoGenerator } from "../templates";
+import {
+    createDtoGenerator,
+    importGeneratorCreateDto,
+    importGeneratorEnumDto,
+    importGeneratorGeneral
+} from "../templates";
 import { DtoType } from "../types";
 
-import { FieldComponent } from "../components";
+import { logger } from "@prisma/sdk";
+import { FieldComponent, RelationComponent } from "../components";
 import { ModelConverter } from "./Model";
 
 export class DtoConverter extends ModelConverter {
@@ -11,9 +17,37 @@ export class DtoConverter extends ModelConverter {
     _createBody = "";
     _updateBody = "";
     _connectBody = "";
+    dtoRelations: RelationComponent[];
+
     constructor(options: DMMF.Model) {
         super(options);
         this._createDtoFields = this.createFields();
+        logger.info(`dto r: ${JSON.stringify(this._relations)}`);
+        this.dtoRelations = this._relations.filter((r) =>
+            this._createDtoFields.map((cdf) => cdf.name).includes(r.obj)
+        );
+
+        logger.info(`dto relations: ${JSON.stringify(this.dtoRelations)}`);
+    }
+
+    stringifyDtoImports(): string {
+        let iString = "";
+
+        this._enums.forEach(
+            (e) => (iString += `${importGeneratorEnumDto(e)};\n`)
+        );
+
+        this.dtoRelations.forEach(
+            (r) => (iString += `${importGeneratorCreateDto(r.obj)};\n`)
+        );
+        this._imports.forEach(
+            (d) =>
+                (iString += `${importGeneratorGeneral({
+                    NAME: d.NAME,
+                    MODULE: d.MODULE
+                })};\n`)
+        );
+        return iString;
     }
 
     createDtoStringBody(): string {
@@ -26,9 +60,9 @@ export class DtoConverter extends ModelConverter {
 
     stringifyCreateDto(): string {
         return createDtoGenerator(
-            this.nameValues.camel,
+            this.nameValues.pascal,
             this.createDtoStringBody(),
-            this.stringifyEntityImports()
+            this.stringifyDtoImports()
         );
     }
 

@@ -175,6 +175,22 @@ export class PrismaGenerator {
         }
     }
 
+    writeDtos = async (): Promise<void> => {
+        for await (const _dto of this._dtos) {
+            const modelString = _dto.stringifyCreateDto();
+            const writeLocation = path.join(
+                this._options.generator.output?.value || "",
+                `${_dto.nameValues.camel}`,
+                "dtos",
+                `Create-${_dto.nameValues.pascal}.dto.ts`
+            );
+            await writeFileSafely(
+                writeLocation,
+                this.commentdisclaimer + `\n\n` + modelString
+            );
+        }
+    };
+
     async genServices(): Promise<void> {
         for await (const modelInfo of this._options.dmmf.datamodel.models) {
             const tsService = new ServiceConverter(modelInfo);
@@ -185,12 +201,14 @@ export class PrismaGenerator {
     writeServices = async (): Promise<void> => {
         for await (const _service of this._services) {
             const serviceString = _service.stringify();
+
             logger.info(`serv string: ${serviceString}`);
             const writeLocation = path.join(
                 this._options.generator.output?.value || "",
                 `${_service.nameValues.camel}`,
                 `${_service.nameValues.camel}.service.ts`
             );
+
             await writeFileSafely(
                 writeLocation,
                 this.commentdisclaimer + `\n\n` + serviceString
@@ -205,6 +223,7 @@ export class PrismaGenerator {
         await this.writeEnums();
         await this.writeModels();
         await this.writeServices();
+        await this.writeDtos();
     }
 
     run = async (): Promise<void> => {
