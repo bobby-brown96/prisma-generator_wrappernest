@@ -23,11 +23,17 @@ export class DtoConverter extends ModelConverter {
         super(options);
         this._createDtoFields = this.createFields();
         logger.info(`dto r: ${JSON.stringify(this._relations)}`);
+        const fieldNames = this._createDtoFields.map((f) => f.tsType);
         this.dtoRelations = this._relations.filter((r) =>
-            this._createDtoFields.map((cdf) => cdf.name).includes(r.obj)
+            fieldNames.includes(r.obj)
         );
-
         logger.info(`dto relations: ${JSON.stringify(this.dtoRelations)}`);
+        this._createDtoFields.forEach((x) => {
+            const relationFields = this.dtoRelations.map((i) => i.obj);
+            if (relationFields.includes(x.tsType || "")) {
+                x.tsType = `Create${x.tsType}Dto`;
+            }
+        });
     }
 
     stringifyDtoImports(): string {
