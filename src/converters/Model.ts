@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { DMMF } from "@prisma/generator-helper";
-import { logger } from "@prisma/sdk";
 import {
     DecoratorComponent,
     FieldComponent,
@@ -34,9 +33,6 @@ export class ModelConverter {
 
     constructor(options: DMMF.Model) {
         this.name = options.name;
-        logger.info(
-            `CONSTRUCTING MODEL ${this.name} from ${JSON.stringify(options)}`
-        );
 
         this.nameValues = toNameCases(this.name);
         this._rawModel = options;
@@ -45,9 +41,7 @@ export class ModelConverter {
 
         this._fields = this.mapFields(options.fields);
         this.markRelationFromFieldsOptional();
-        logger.info(
-            `CONSTRUCTED MODEL ${this.name} to ${JSON.stringify(this)}`
-        );
+
         this.decsToImports(this.getAllDecorators());
     }
     markRelationFromFieldsOptional(): void {
@@ -134,7 +128,6 @@ export class ModelConverter {
     stringifyImports(): string {
         let iString = "";
 
-        logger.info(`imports to generate: ${JSON.stringify(this._imports)}`);
         this._imports.forEach(
             (d) =>
                 (iString += `${importGeneratorGeneral({
@@ -176,7 +169,7 @@ export class ModelConverter {
     getAllDecorators(): DecoratorComponent[] {
         let allDecorators = this._fields.flatMap((x) => x._docs);
         allDecorators = [...new Set(allDecorators)];
-        logger.info(`all decorators: ${JSON.stringify(allDecorators)}`);
+        //   logger.info(`all decorators: ${JSON.stringify(allDecorators)}`);
         return allDecorators;
     }
 
@@ -196,7 +189,6 @@ export class ModelConverter {
             return group;
         }, {});
 
-        logger.info(`reduce values: ${JSON.stringify(reduced)}`);
         let i: IImport[] = [];
         for (const [k, v] of Object.entries(reduced)) {
             const t = [...new Set(v as string[])];

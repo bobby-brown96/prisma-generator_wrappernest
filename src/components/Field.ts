@@ -1,5 +1,4 @@
 import { DMMF } from "@prisma/generator-helper";
-import { logger } from "@prisma/sdk";
 import { IField } from "../interfaces/IField";
 import { INameCases } from "../interfaces/INameCases";
 import { fieldGeneratorGeneral } from "../templates";
@@ -102,7 +101,7 @@ export class FieldComponent {
 
     docsToArray(decorations: string): string[] {
         const ugly = decorations.split("\n");
-        logger.info(`ugly ${ugly}`);
+
         return ugly;
     }
 

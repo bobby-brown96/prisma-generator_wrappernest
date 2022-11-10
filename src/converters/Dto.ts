@@ -7,7 +7,6 @@ import {
 } from "../templates";
 import { DtoType } from "../types";
 
-import { logger } from "@prisma/sdk";
 import { FieldComponent, RelationComponent } from "../components";
 import { ModelConverter } from "./Model";
 
@@ -22,12 +21,13 @@ export class DtoConverter extends ModelConverter {
     constructor(options: DMMF.Model) {
         super(options);
         this._createDtoFields = this.createFields();
-        logger.info(`dto r: ${JSON.stringify(this._relations)}`);
+        //     logger.info(`dto r: ${JSON.stringify(this._relations)}`);
         const fieldNames = this._createDtoFields.map((f) => f.tsType);
         this.dtoRelations = this._relations.filter((r) =>
             fieldNames.includes(r.obj)
         );
-        logger.info(`dto relations: ${JSON.stringify(this.dtoRelations)}`);
+
+        //    logger.info(`dto relations: ${JSON.stringify(this.dtoRelations)}`);
         this._createDtoFields.forEach((x) => {
             const relationFields = this.dtoRelations.map((i) => i.obj);
             if (relationFields.includes(x.tsType || "")) {

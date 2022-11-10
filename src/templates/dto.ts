@@ -7,7 +7,7 @@ export function createDtoGenerator(
     decorator = ""
 ): string {
     return `${decorator}
-    export class Create${name}Dto {
+    export class Create${name}DtoBase {
         ${body}
       }`;
 }
@@ -22,7 +22,7 @@ export function importGeneratorEnumDto(opts: string): string {
 export function importGeneratorCreateDto(opts: string): string {
     const names = toNameCases(opts);
     return importGeneratorGeneral({
-        NAME: `{Create${names.pascal}Dto}`,
+        NAME: `{Create${names.pascal}DtoBase}`,
         MODULE: `../../${names.camel}/dtos/Create-${names.pascal}.dto`
     });
 }

@@ -122,7 +122,7 @@ export class PrismaGenerator {
         this._options.dmmf.datamodel.enums.forEach(async (enumInfo) => {
             this._enums.push(new EnumConverter(enumInfo));
         });
-        logger.info(`GENERATED_ENUMS: ${JSON.stringify(this._enums)}`);
+        // logger.info(`GENERATED_ENUMS: ${JSON.stringify(this._enums)}`);
     }
     writeEnums = async (): Promise<void> => {
         this._enums.forEach(async (_enum) => {
@@ -142,7 +142,7 @@ export class PrismaGenerator {
 
     async genModels(): Promise<void> {
         for await (const modelInfo of this._options.dmmf.datamodel.models) {
-            logger.info(`going to process model: ${modelInfo}`);
+            // logger.info(`going to process model: ${modelInfo}`);
 
             const tsModel = new ModelConverter(modelInfo);
 
@@ -202,7 +202,7 @@ export class PrismaGenerator {
         for await (const _service of this._services) {
             const serviceString = _service.stringify();
 
-            logger.info(`serv string: ${serviceString}`);
+            //   logger.info(`serv string: ${serviceString}`);
             const writeLocation = path.join(
                 this._options.generator.output?.value || "",
                 `${_service.nameValues.camel}`,
@@ -228,6 +228,7 @@ export class PrismaGenerator {
 
     run = async (): Promise<void> => {
         logger.info(`running generator`);
+
         // Generate the enum object
         this.genEnums();
 
