@@ -1,5 +1,4 @@
 import { DMMF } from "@prisma/generator-helper";
-import { logger } from "@prisma/sdk";
 import { IField } from "../interfaces/IField";
 import { INameCases } from "../interfaces/INameCases";
 import { fieldGeneratorGeneral } from "../templates";
@@ -40,13 +39,19 @@ export class FieldComponent {
             this.docString.push("IsNotEmpty");
             this.required = options.required;
         } else this.docString.push("IsOptional");
-        if (options.readonly) {
-            this.readonly = options.readonly;
+
+        if (
+            options.readonly ||
+            ["createdAt", "updatedAt"].includes(this.name)
+        ) {
+            this.readonly = true;
         } else this.docString.push("Prop");
+
         if (options.decorations)
             this.docString.push(...this.docsToArray(options.decorations));
 
         if (this.docString.length > 0) this._docs = this.createDecorators();
+
         this.mapFieldType();
     }
 
@@ -96,7 +101,7 @@ export class FieldComponent {
 
     docsToArray(decorations: string): string[] {
         const ugly = decorations.split("\n");
-        logger.info(`ugly ${ugly}`);
+
         return ugly;
     }
 

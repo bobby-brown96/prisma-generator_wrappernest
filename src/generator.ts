@@ -3,7 +3,12 @@ import { logger, parseEnvValue } from "@prisma/sdk";
 import path from "path";
 import { Options, resolveConfig } from "prettier";
 import { COMMENT_DISCLAIMER } from "./constants";
-import { EnumConverter, ModelConverter, ServiceConverter } from "./converters";
+import {
+    DtoConverter,
+    EnumConverter,
+    ModelConverter,
+    ServiceConverter
+} from "./converters";
 
 import { GeneratorPathNotExists } from "./error-handler";
 import { writeFileSafely } from "./utils/write-file";
@@ -47,6 +52,7 @@ export class PrismaGenerator {
     _enums: EnumConverter[] = [];
     _models: ModelConverter[] = [];
     _services: ServiceConverter[] = [];
+    _dtos: DtoConverter[] = [];
     // wrapper: Wrapper;
 
     constructor(options: GeneratorOptions) {
@@ -116,7 +122,7 @@ export class PrismaGenerator {
         this._options.dmmf.datamodel.enums.forEach(async (enumInfo) => {
             this._enums.push(new EnumConverter(enumInfo));
         });
-        logger.info(`GENERATED_ENUMS: ${JSON.stringify(this._enums)}`);
+        // logger.info(`GENERATED_ENUMS: ${JSON.stringify(this._enums)}`);
     }
     writeEnums = async (): Promise<void> => {
         this._enums.forEach(async (_enum) => {
@@ -136,8 +142,13 @@ export class PrismaGenerator {
 
     async genModels(): Promise<void> {
         for await (const modelInfo of this._options.dmmf.datamodel.models) {
-            logger.info(`going to process model: ${modelInfo}`);
+            // logger.info(`going to process model: ${modelInfo}`);
+
             const tsModel = new ModelConverter(modelInfo);
+
+            // //populate dtos at the same time
+            // this.genDtos(modelInfo);
+
             this._models.push(tsModel);
         }
     }
@@ -157,6 +168,29 @@ export class PrismaGenerator {
         }
     };
 
+    async genDtos(): Promise<void> {
+        for await (const modelInfo of this._options.dmmf.datamodel.models) {
+            const tsDto = new DtoConverter(modelInfo);
+            this._dtos.push(tsDto);
+        }
+    }
+
+    writeDtos = async (): Promise<void> => {
+        for await (const _dto of this._dtos) {
+            const modelString = _dto.stringifyCreateDto();
+            const writeLocation = path.join(
+                this._options.generator.output?.value || "",
+                `${_dto.nameValues.camel}`,
+                "dtos",
+                `Create-${_dto.nameValues.pascal}.dto.ts`
+            );
+            await writeFileSafely(
+                writeLocation,
+                this.commentdisclaimer + `\n\n` + modelString
+            );
+        }
+    };
+
     async genServices(): Promise<void> {
         for await (const modelInfo of this._options.dmmf.datamodel.models) {
             const tsService = new ServiceConverter(modelInfo);
@@ -167,12 +201,14 @@ export class PrismaGenerator {
     writeServices = async (): Promise<void> => {
         for await (const _service of this._services) {
             const serviceString = _service.stringify();
-            logger.info(`serv string: ${serviceString}`);
+
+            //   logger.info(`serv string: ${serviceString}`);
             const writeLocation = path.join(
                 this._options.generator.output?.value || "",
                 `${_service.nameValues.camel}`,
                 `${_service.nameValues.camel}.service.ts`
             );
+
             await writeFileSafely(
                 writeLocation,
                 this.commentdisclaimer + `\n\n` + serviceString
@@ -187,10 +223,12 @@ export class PrismaGenerator {
         await this.writeEnums();
         await this.writeModels();
         await this.writeServices();
+        await this.writeDtos();
     }
 
     run = async (): Promise<void> => {
         logger.info(`running generator`);
+
         // Generate the enum object
         this.genEnums();
 
@@ -198,6 +236,9 @@ export class PrismaGenerator {
         await this.genModels();
 
         await this.genServices();
+
+        await this.genDtos();
+
         // run writer function
         await this.writer();
     };

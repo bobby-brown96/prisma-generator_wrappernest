@@ -20,7 +20,7 @@ export const TServiceCrud = (options: NameCases): string => {
     async count<T extends Prisma.${options.title}FindManyArgs>(
         args: Prisma.SelectSubset<T, Prisma.${options.title}FindManyArgs>
       ): Promise<number> {
-        return this.prisma.${options.camel}.count(args);
+        return await this.prisma.${options.camel}.count(args);
       }
 
       async create<T extends Prisma.${options.title}CreateArgs>(
