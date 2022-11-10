@@ -1,2 +1,4 @@
 .eslintrc.json
 README.md
+dist
+commitlint.config.js

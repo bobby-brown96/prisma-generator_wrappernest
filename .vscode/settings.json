@@ -12,13 +12,18 @@
         "commentdisclamer",
         "Datamodel",
         "DMMF",
+        "dtos",
         "nestjs",
         "nestwrapper",
+        "serv",
         "wrappernest"
     ],
     "workbench.colorTheme": "Colorful-Dark-Theme",
     "[dockerfile]": {
         "editor.defaultFormatter": "ms-azuretools.vscode-docker"
     },
-    "js/ts.implicitProjectConfig.experimentalDecorators": true
+    "js/ts.implicitProjectConfig.experimentalDecorators": true,
+    "[prisma]": {
+        "editor.defaultFormatter": "Prisma.prisma"
+    }
 }
