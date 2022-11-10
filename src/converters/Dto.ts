@@ -21,7 +21,7 @@ export class DtoConverter extends ModelConverter {
     constructor(options: DMMF.Model) {
         super(options);
         this._createDtoFields = this.createFields();
-        //     logger.info(`dto r: ${JSON.stringify(this._relations)}`);
+
         const fieldNames = this._createDtoFields.map((f) => f.tsType);
         this.dtoRelations = this._relations.filter((r) =>
             fieldNames.includes(r.obj)

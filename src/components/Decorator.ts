@@ -9,6 +9,7 @@ export class DecoratorComponent {
 
     constructor(options: { name: string }) {
         this.raw = options.name;
+
         const result = DecoratorComponent.MAPPED_DECORATIONS.find(
             (x) => x.input === this.raw
         );
