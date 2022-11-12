@@ -27,7 +27,7 @@ export function importGeneratorEnum(opts: string): string {
 export function importGeneratorModel(opts: string): string {
     const names = toNameCases(opts);
     return importGeneratorGeneral({
-        NAME: `{${names.pascal}}`,
+        NAME: `{${names.pascal}Base}`,
         MODULE: `../${names.camel}/${names.pascal}`
     });
 }
@@ -38,7 +38,7 @@ export function classGenerator(
     decorator = ""
 ): string {
     return `${decorator}
-    export class ${name} {
+    export class ${name}Base {
         ${body}
       }`;
 }
