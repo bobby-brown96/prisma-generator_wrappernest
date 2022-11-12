@@ -31,7 +31,7 @@ export class DtoConverter extends ModelConverter {
         this._createDtoFields.forEach((x) => {
             const relationFields = this.dtoRelations.map((i) => i.obj);
             if (relationFields.includes(x.tsType || "")) {
-                x.tsType = `Create${x.tsType}Dto`;
+                x.tsType = `Create${x.tsType}DtoBase`;
             }
         });
     }
