@@ -159,7 +159,7 @@ export class PrismaGenerator {
             const writeLocation = path.join(
                 this._options.generator.output?.value || "",
                 `${_model.nameValues.camel}`,
-                `${_model.nameValues.pascal}.ts`
+                `${_model.nameValues.pascal}Base.ts`
             );
             await writeFileSafely(
                 writeLocation,
@@ -206,7 +206,7 @@ export class PrismaGenerator {
             const writeLocation = path.join(
                 this._options.generator.output?.value || "",
                 `${_service.nameValues.camel}`,
-                `${_service.nameValues.camel}.service.ts`
+                `${_service.nameValues.camel}Base.service.ts`
             );
 
             await writeFileSafely(

@@ -28,7 +28,7 @@ export function importGeneratorModel(opts: string): string {
     const names = toNameCases(opts);
     return importGeneratorGeneral({
         NAME: `{${names.pascal}Base}`,
-        MODULE: `../${names.camel}/${names.pascal}`
+        MODULE: `../${names.camel}/${names.pascal}Base`
     });
 }
 

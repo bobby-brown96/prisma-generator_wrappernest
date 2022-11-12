@@ -62,7 +62,9 @@ export class FieldComponent {
 
         if (!this.tsType) {
             this.unMappedTypes();
-            this.tsType = this.prismaType;
+            this.tsType = this.prismaType.startsWith("Enum")
+                ? this.prismaType
+                : `${this.prismaType}Base`;
         }
     }
 
