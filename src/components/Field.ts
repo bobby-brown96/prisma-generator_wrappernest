@@ -81,7 +81,9 @@ export class FieldComponent {
         String: "string",
         Int: "number",
         DateTime: "Date",
-        Boolean: "boolean"
+        Boolean: "boolean",
+        Float: "number",
+        Json: "any"
     };
 
     prismaToDecorate(): void {

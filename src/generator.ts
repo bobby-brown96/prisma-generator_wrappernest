@@ -223,7 +223,7 @@ export class PrismaGenerator {
         await this.writeEnums();
         await this.writeModels();
         await this.writeServices();
-        await this.writeDtos();
+        //   await this.writeDtos();
     }
 
     run = async (): Promise<void> => {
