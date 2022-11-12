@@ -144,7 +144,7 @@ export class ModelConverter {
         this._enums.forEach((e) => (iString += `${importGeneratorEnum(e)};\n`));
 
         this._relations.forEach((r) => {
-            if (r.obj !== this.nameValues.title + "Base")
+            if (r.obj !== this.nameValues.title)
                 iString += `${importGeneratorModel(r.obj)};\n`;
         });
         this._imports.forEach(
