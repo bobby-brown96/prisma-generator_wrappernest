@@ -144,6 +144,7 @@ export class PrismaGenerator {
         for await (const modelInfo of this._options.dmmf.datamodel.models) {
             logger.info(`going to process model: ${JSON.stringify(modelInfo)}`);
 
+            //handles composites now
             const tsModel = new ModelConverter(modelInfo);
 
             // //populate dtos at the same time
