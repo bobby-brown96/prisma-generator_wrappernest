@@ -55,6 +55,19 @@ model Book {
   updatedAt           DateTime @updatedAt
 }
 
+model CompositeK {
+  /// B$CreatedAt
+  createdAt DateTime @default(now())
+
+  /// B$ReadOnly
+  updatedAt DateTime @updatedAt
+
+  firstId  Int
+  secondId Int
+
+  @@id([firstId, secondId])
+}
+
 enum EnumNotificationType {
   newPosts
   newComments

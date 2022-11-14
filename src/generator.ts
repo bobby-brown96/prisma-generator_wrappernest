@@ -142,7 +142,7 @@ export class PrismaGenerator {
 
     async genModels(): Promise<void> {
         for await (const modelInfo of this._options.dmmf.datamodel.models) {
-            // logger.info(`going to process model: ${modelInfo}`);
+            logger.info(`going to process model: ${JSON.stringify(modelInfo)}`);
 
             const tsModel = new ModelConverter(modelInfo);
 
@@ -243,3 +243,69 @@ export class PrismaGenerator {
         await this.writer();
     };
 }
+
+const model = {
+    name: "CompositeK",
+    dbName: null,
+    fields: [
+        {
+            name: "createdAt",
+            kind: "scalar",
+            isList: false,
+            isRequired: true,
+            isUnique: false,
+            isId: false,
+            isReadOnly: false,
+            hasDefaultValue: true,
+            type: "DateTime",
+            default: { name: "now", args: [] },
+            isGenerated: false,
+            isUpdatedAt: false,
+            documentation: "B$CreatedAt"
+        },
+        {
+            name: "updatedAt",
+            kind: "scalar",
+            isList: false,
+            isRequired: true,
+            isUnique: false,
+            isId: false,
+            isReadOnly: false,
+            hasDefaultValue: false,
+            type: "DateTime",
+            isGenerated: false,
+            isUpdatedAt: true,
+            documentation: "B$ReadOnly"
+        },
+        {
+            name: "firstId",
+            kind: "scalar",
+            isList: false,
+            isRequired: true,
+            isUnique: false,
+            isId: false,
+            isReadOnly: false,
+            hasDefaultValue: false,
+            type: "Int",
+            isGenerated: false,
+            isUpdatedAt: false
+        },
+        {
+            name: "secondId",
+            kind: "scalar",
+            isList: false,
+            isRequired: true,
+            isUnique: false,
+            isId: false,
+            isReadOnly: false,
+            hasDefaultValue: false,
+            type: "Int",
+            isGenerated: false,
+            isUpdatedAt: false
+        }
+    ],
+    primaryKey: { name: null, fields: ["firstId", "secondId"] },
+    uniqueFields: [],
+    uniqueIndexes: [],
+    isGenerated: false
+};

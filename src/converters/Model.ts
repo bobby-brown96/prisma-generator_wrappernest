@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { DMMF } from "@prisma/generator-helper";
+import { logger } from "@prisma/sdk";
 import {
     DecoratorComponent,
     FieldComponent,
@@ -36,7 +37,7 @@ export class ModelConverter {
 
         this.nameValues = toNameCases(this.name);
         this._rawModel = options;
-        this.pk = this.createIdObj(options.fields);
+        this.pk = this.createIdObj(options);
         this._relations = this.mapRelations(options.fields);
 
         this._fields = this.mapFields(options.fields);
@@ -54,15 +55,32 @@ export class ModelConverter {
             }
         }
     }
-    createIdObj(options: DMMF.Field[]): IPrimaryKey {
-        const idTrue = options.find((x) => x.isId);
+    createIdObj(options: DMMF.Model): IPrimaryKey {
+        const fields = options.fields;
+        const idTrue = fields.find((x) => x.isId);
         if (idTrue)
             return {
                 name: idTrue.name,
                 type: idTrue.Type,
-                auto: !!idTrue.default?.toString()
+                auto: !!idTrue.default?.toString(),
+                isComposite: false
             };
-        else throw new Error("NO ID FOUND");
+        else {
+            logger.info(
+                "working on composites" + JSON.stringify(options.primaryKey)
+            );
+            const _pk = options.primaryKey;
+
+            if (!_pk) throw new Error("NO ID FOUND");
+            const pkFields = _pk.fields.join("_");
+
+            return {
+                isComposite: true,
+                type: "string",
+                name: pkFields,
+                auto: false
+            };
+        }
     }
 
     mapRelations(options: DMMF.Field[]): RelationComponent[] {
