@@ -48,6 +48,12 @@ export const TServiceCrud = (options: NameCases): string => {
         return await this.prisma.${options.camel}.update<T>(args);
     }
 
+    async   upsert<T extends Prisma.${options.title}UpsertArgs>(
+      args: Prisma.SelectSubset<T, Prisma.${options.title}UpsertArgs>
+    ): Promise<${options.title}>  {
+      return await this.prisma.${options.camel}.upsert<T>(args);
+  }
+
     async   remove<T extends Prisma.${options.title}DeleteArgs>(
         args: Prisma.SelectSubset<T, Prisma.${options.title}DeleteArgs>
       ): Promise<${options.title}>   {
