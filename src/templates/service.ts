@@ -10,7 +10,7 @@ export const TService = (options: {
     ${options.imports}\n
     @Injectable()
     export class ${options.name.title}ServiceBase {\n
-        constructor(private prisma: PrismaService) {}\n
+        constructor(protected prisma: PrismaService) {}\n
         ${options.body}
     }`;
 };
