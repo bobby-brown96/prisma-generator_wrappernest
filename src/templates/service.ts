@@ -23,14 +23,14 @@ export const TServiceCrud = (options: NameCases): string => {
         return await this.prisma.${options.camel}.count(args);
       }
 
-      async create<T extends Prisma.${options.title}CreateArgs>(
+      protected async create<T extends Prisma.${options.title}CreateArgs>(
         args: Prisma.SelectSubset<T, Prisma.${options.title}CreateArgs>
       ): Promise<${options.title}> {
         return await this.prisma.${options.camel}.create<T>(args
         );
       }
 
-    async findMany<T extends Prisma.${options.title}FindManyArgs>(
+    async  findMany<T extends Prisma.${options.title}FindManyArgs>(
         args: Prisma.SelectSubset<T, Prisma.${options.title}FindManyArgs>
       ): Promise<${options.title}[]> {
         return await this.prisma.${options.camel}.findMany(args);
@@ -42,19 +42,19 @@ export const TServiceCrud = (options: NameCases): string => {
         return await this.prisma.${options.camel}.findUnique(args);
     }
 
-    async   update<T extends Prisma.${options.title}UpdateArgs>(
+    protected async update<T extends Prisma.${options.title}UpdateArgs>(
         args: Prisma.SelectSubset<T, Prisma.${options.title}UpdateArgs>
       ): Promise<${options.title}>  {
         return await this.prisma.${options.camel}.update<T>(args);
     }
 
-    async   upsert<T extends Prisma.${options.title}UpsertArgs>(
+    protected async upsert<T extends Prisma.${options.title}UpsertArgs>(
       args: Prisma.SelectSubset<T, Prisma.${options.title}UpsertArgs>
     ): Promise<${options.title}>  {
       return await this.prisma.${options.camel}.upsert<T>(args);
   }
 
-    async   remove<T extends Prisma.${options.title}DeleteArgs>(
+  protected async remove<T extends Prisma.${options.title}DeleteArgs>(
         args: Prisma.SelectSubset<T, Prisma.${options.title}DeleteArgs>
       ): Promise<${options.title}>   {
         return await this.prisma.${options.camel}.delete(args);
